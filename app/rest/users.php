@@ -11,7 +11,7 @@
         $response = PROCESS_POST();
       break;
     case 'PUT':
-        echo "put";
+        $response = PROCESS_PUT();
       break;
     case 'DELETE':
             echo "delete"; 
@@ -20,6 +20,7 @@
         OPTIONS_DEV();
       break;
   }
+
 
   function PROCESS_GET(){
     $Users = new Users;
@@ -32,6 +33,7 @@
     return $result;
   }
 
+
   function PROCESS_POST(){
     $Users = new Users;
     $result = null;
@@ -39,6 +41,21 @@
     $result = $Users->POST($data);
     return $result;
   }
+
+
+  function PROCESS_PUT(){
+    $Users = new Users;
+    $result = null;
+    if (isset($_GET['id'])) {
+      $data = json_decode(file_get_contents("php://input"), true);
+      $result = $Users->UPDATE($_GET['id'],$data);
+    } else {
+      $result['status'] = false;
+      $result['require'] = "id is required in the url";
+    }
+    return $result;
+  }
+
 
 
 
